@@ -5,7 +5,7 @@ SVG.extend(SVG.Element, {
   // Build node string
   export: function(options, level) {
     var i, il, children, width, height
-      , name = this.node.nodeName.toLowerCase()
+      , name = this.node.nodeName
       , node = ''
     
     /* ensure options */
