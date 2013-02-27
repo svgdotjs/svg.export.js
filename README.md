@@ -48,11 +48,11 @@ var exportedRect = rect.export()
 ```
 
 ## Export attributes
-In some cases you might want elements to be exported with different attribute values:
+In some cases you might want elements to be exported with different attribute values. This can be done with the `exportAttr()` method:
 
 ```javascript
 var draw = svg('paper').size(400,400)
-var rect = draw.rect(100, 100).fill('#333').data('export-attr', { fill: '#f06' })
+var rect = draw.rect(100, 100).fill('#333').exportAttr({ fill: '#f06' })
 
 var svgExport = draw.export({ whitespace: true })
 ```
@@ -69,6 +69,15 @@ Will produce:
   </rect>
 </svg>
 ```
+
+Not unlike the `attr()` method, `exportAttr()` will also act as a getter if no argument is supplied:
+
+```javascript
+rect = exportAttr()
+// => { fill: '#f06' }
+```
+
+
 
 ## Excluding elements
 In some cases you might want to exclude some elements from the export and here is how to achieve that:

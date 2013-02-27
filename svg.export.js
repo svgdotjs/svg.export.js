@@ -61,13 +61,22 @@ SVG.extend(SVG.Element, {
       node += this._whitespaced('</' + name + '>', options.whitespace, level)
     }
     
-    return node;
+    return node
+  }
+  // Set specific export attibutes
+, exportAttr: function(attr) {
+    /* acts as getter */
+    if (arguments.length == 0)
+      return this.data('svg-export-attr')
+    
+    /* acts as setter */
+    return this.data('svg-export-attr', attr)
   }
   // Convert attributes to string
 , attrToString: function() {
     var key, attrs, value
       , attr = []
-      , data = this.data('export-attr')
+      , data = this.exportAttr()
       , exportAttrs = this.attrs
     
     /* ensure data */
@@ -96,7 +105,7 @@ SVG.extend(SVG.Element, {
           key = 'xmlns:xlink'
         
         /* build value */
-        if (key != 'data-export-attr')
+        if (key != 'data-svg-export-attr')
           attr.push(key + '="' + value + '"')
       }
       
