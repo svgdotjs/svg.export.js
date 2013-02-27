@@ -34,8 +34,19 @@ Finally, if you are exporting the whole svg canvas you can set a target `width` 
 var draw = svg('paper').size(400, 400).viewbox(0,0,200,200)
 var rect = draw.rect(100, 100)
 
-var svgExport = rect.export({ width: '150mm', height: '150mm' })
+var svgExport = draw.export({ width: '150mm', height: '150mm' })
 ```
+
+## Exporting elements
+Individual elements can be exported as well:
+
+```javascript
+var draw = svg('paper')
+var rect = draw.rect(100, 100)
+
+var exportedRect = rect.export()
+```
+
 
 ## Excluding elements
 In some cases you might want to exclude some elements from the export and here is how to achieve that:
@@ -45,7 +56,7 @@ var draw = svg('paper')
 var rect = draw.rect(100, 100)
 var circle = draw.circle(100)
 
-var svgExport = rect.export({
+var svgExport = draw.export({
   exclude: function() {
     return this.type == 'circle'
   }
@@ -55,9 +66,26 @@ var svgExport = rect.export({
 A great way to approach this is to bind a data attribute to the elements you want to be excluded:
 
 ```javascript
-var svgExport = rect.export({
+var draw = svg('paper')
+var rect = draw.rect(100, 100)
+var circle = draw.circle(100).data('exclude', true)
+
+var svgExport = draw.export({
   exclude: function() {
     return this.data('exclude')
   }
 })
+```
+
+This will produce the following output:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <desc>Created with svg.js [http://svgjs.com]</desc>
+  <defs>
+  </defs>
+  <rect width="100" height="100">
+  </rect>
+</svg>
 ```
