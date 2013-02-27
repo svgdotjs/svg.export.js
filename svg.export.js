@@ -105,7 +105,7 @@ SVG.extend(SVG.Element, {
           key = 'xmlns:xlink'
         
         /* build value */
-        if (key != 'data-svg-export-attr')
+        if (key != 'data-svg-export-attr' && (key != 'stroke' || parseFloat(exportAttrs['stroke-width']) > 0))
           attr.push(key + '="' + value + '"')
       }
       
