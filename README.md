@@ -47,6 +47,28 @@ var rect = draw.rect(100, 100)
 var exportedRect = rect.export()
 ```
 
+## Export attributes
+In some cases you might want elements to be exported with different attribute values:
+
+```javascript
+var draw = svg('paper').size(400,400)
+var rect = draw.rect(100, 100).fill('#333').data('export-attr', { fill: '#f06' })
+
+var svgExport = draw.export({ whitespace: true })
+```
+
+Will produce:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <desc>Created with svg.js [http://svgjs.com]</desc>
+  <defs>
+  </defs>
+  <rect fill="#f06" width="100" height="100">
+  </rect>
+</svg>
+```
 
 ## Excluding elements
 In some cases you might want to exclude some elements from the export and here is how to achieve that:
@@ -74,6 +96,7 @@ var svgExport = draw.export({
   exclude: function() {
     return this.data('exclude')
   }
+, whitespace: true
 })
 ```
 

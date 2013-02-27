@@ -1,4 +1,4 @@
-// svg.export.js 0.2 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.3 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
@@ -67,6 +67,13 @@ SVG.extend(SVG.Element, {
 , attrToString: function() {
     var key, attrs, value
       , attr = []
+      , data = this.data('export-attr')
+      , exportAttrs = this.attrs
+    
+    /* ensure data */
+    if (typeof data == 'object')
+      for (key in data)
+        exportAttrs[key] = data[key]
     
     /* get default values */
     if (SVG._attrExportDefaults) {
@@ -79,8 +86,8 @@ SVG.extend(SVG.Element, {
     }
     
     /* build list */
-    for (key in this.attrs) {
-      value = this.attrs[key]
+    for (key in exportAttrs) {
+      value = exportAttrs[key]
       
       /* add value */
       if (value != attrs[key]) {
@@ -89,7 +96,8 @@ SVG.extend(SVG.Element, {
           key = 'xmlns:xlink'
         
         /* build value */
-        attr.push(key + '="' + value + '"')
+        if (key != 'data-export-attr')
+          attr.push(key + '="' + value + '"')
       }
       
     }
