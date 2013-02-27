@@ -36,3 +36,28 @@ var rect = draw.rect(100, 100)
 
 var svgExport = rect.export({ width: '150mm', height: '150mm' })
 ```
+
+## Excluding elements
+In some cases you might want to exclude some elements from the export and here is how to achieve that:
+
+```javascript
+var draw = svg('paper')
+var rect = draw.rect(100, 100)
+var circle = draw.circle(100)
+
+var svgExport = rect.export({
+  exclude: function() {
+    return this.type == 'circle'
+  }
+})
+```
+
+A great way to approach this is to bind a data attribute to the elements you want to be excluded:
+
+```javascript
+var svgExport = rect.export({
+  exclude: function() {
+    return this.data('exclude')
+  }
+})
+```

@@ -1,4 +1,4 @@
-// svg.export.js 0.1 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.2 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
@@ -8,48 +8,53 @@ SVG.extend(SVG.Element, {
       , name = this.node.nodeName.toLowerCase()
       , node = ''
     
-    /* ensure defaults */
+    /* ensure options */
     options = options || {}
-    level = level || 0
     
-    /* set context size */
-    if (this instanceof SVG.Doc) {
-      width  = this.attr('width')
-      height = this.attr('height')
+    if (options.exclude == null || !options.exclude.call(this)) {
+      /* ensure defaults */
+      options = options || {}
+      level = level || 0
       
-      if (options.width)
-        this.attr('width', options.width)
-      if (options.height)
-        this.attr('height', options.height)
+      /* set context size */
+      if (this instanceof SVG.Doc) {
+        width  = this.attr('width')
+        height = this.attr('height')
+        
+        if (options.width)
+          this.attr('width', options.width)
+        if (options.height)
+          this.attr('height', options.height)
+      }
+        
+      /* open node */
+      node += this._whitespaced('<' + name + this.attrToString() + '>', options.whitespace, level)
+      
+      /* reset size and add description */
+      if (this instanceof SVG.Doc) {
+        this.attr({
+          width:  width
+        , height: height
+        })
+        
+        node += this._whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
+      }
+      
+      /* add children */
+      if (this instanceof SVG.Container) {
+        children = this.children()
+        
+        for (i = 0, il = children.length; i < il; i++)
+          node += children[i].export(options, level + 1)
+        
+      } else if (this instanceof SVG.Wrap) {
+        node += this.child.export(options, level + 1)
+        
+      }
+      
+      /* close node */
+      node += this._whitespaced('</' + name + '>', options.whitespace, level)
     }
-      
-    /* open node */
-    node += this._whitespaced('<' + name + this.attrToString() + '>', options.whitespace, level)
-    
-    /* reset size and add description */
-    if (this instanceof SVG.Doc) {
-      this.attr({
-        width:  width
-      , height: height
-      })
-      
-      node += this._whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
-    }
-    
-    /* add children */
-    if (this instanceof SVG.Container) {
-      children = this.children()
-      
-      for (i = 0, il = children.length; i < il; i++)
-        node += children[i].export(options, level + 1)
-      
-    } else if (this instanceof SVG.Wrap) {
-      node += this.child.export(options, level + 1)
-      
-    }
-    
-    /* close node */
-    node += this._whitespaced('</' + name + '>', options.whitespace, level)
     
     return node;
   }
