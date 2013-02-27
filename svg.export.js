@@ -16,11 +16,16 @@ SVG.extend(SVG.Element, {
       options = options || {}
       level = level || 0
       
-      /* set context size */
+      /* set context */
       if (this instanceof SVG.Doc) {
+        /* define doctype */
+        node += this._whitespaced('<?xml version="1.0" encoding="UTF-8"?>', options.whitespace, level)
+        
+        /* store current width and height */
         width  = this.attr('width')
         height = this.attr('height')
         
+        /* set required size */
         if (options.width)
           this.attr('width', options.width)
         if (options.height)
@@ -79,6 +84,10 @@ SVG.extend(SVG.Element, {
       
       /* add value */
       if (value != attrs[key]) {
+        /* enfoce explicit xlink namespace */
+        if (key == 'xlink')
+          key = 'xmlns:xlink'
+        
         /* build value */
         attr.push(key + '="' + value + '"')
       }
@@ -94,7 +103,7 @@ SVG.extend(SVG.Element, {
         , space = add === true ? '  ' : add || ''
       
       /* build indentation */
-      for (i = level; i >= 0; i--)
+      for (i = level - 1; i >= 0; i--)
         whitespace += space
       
       /* add whitespace */
