@@ -10,7 +10,7 @@ Include this plugin after including the svg.js library in your html document.
 To export the whole svg canvas:
 
 ```javascript
-var draw = svg('paper').size(400, 400)
+var draw = SVG('paper').size(400, 400)
 var rect = draw.rect(100, 100)
 
 var svgExport = rect.export()
@@ -31,7 +31,7 @@ var svgExport = draw.export({ whitespace: '\t' })
 Finally, if you are exporting the whole svg canvas you can set a target `width` and `height`. This is especially useful if you are using a the `viewbox()` method on your svg canvas:
 
 ```javascript
-var draw = svg('paper').size(400, 400).viewbox(0,0,200,200)
+var draw = SVG('paper').size(400, 400).viewbox(0,0,200,200)
 var rect = draw.rect(100, 100)
 
 var svgExport = draw.export({ width: '150mm', height: '150mm' })
@@ -41,7 +41,7 @@ var svgExport = draw.export({ width: '150mm', height: '150mm' })
 Individual elements can be exported as well:
 
 ```javascript
-var draw = svg('paper')
+var draw = SVG('paper')
 var rect = draw.rect(100, 100)
 
 var exportedRect = rect.export()
@@ -51,7 +51,7 @@ var exportedRect = rect.export()
 In some cases you might want elements to be exported with different attribute values. This can be done with the `exportAttr()` method:
 
 ```javascript
-var draw = svg('paper').size(400,400)
+var draw = SVG('paper').size(400,400)
 var rect = draw.rect(100, 100).fill('#333').exportAttr({ fill: '#f06' })
 
 var svgExport = draw.export({ whitespace: true })
@@ -83,7 +83,7 @@ rect = exportAttr()
 In some cases you might want to exclude some elements from the export and here is how to achieve that:
 
 ```javascript
-var draw = svg('paper')
+var draw = SVG('paper')
 var rect = draw.rect(100, 100)
 var circle = draw.circle(100)
 
@@ -97,7 +97,7 @@ var svgExport = draw.export({
 A great way to approach this is to bind a data attribute to the elements you want to be excluded:
 
 ```javascript
-var draw = svg('paper')
+var draw = SVG('paper')
 var rect = draw.rect(100, 100)
 var circle = draw.circle(100).data('exclude', true)
 
