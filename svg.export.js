@@ -1,10 +1,10 @@
-// svg.export.js 0.3 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.4 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
   // Build node string
   export: function(options, level) {
-    var i, il, children, width, height
+    var i, il, width, height
       , name = this.node.nodeName
       , node = ''
     
@@ -47,10 +47,8 @@ SVG.extend(SVG.Element, {
       
       /* add children */
       if (this instanceof SVG.Container) {
-        children = this.children()
-        
-        for (i = 0, il = children.length; i < il; i++)
-          node += children[i].export(options, level + 1)
+        for (i = 0, il = this.children.length; i < il; i++)
+          node += this.children[i].export(options, level + 1)
         
       } else if (this instanceof SVG.Wrap) {
         node += this.child.export(options, level + 1)
@@ -74,40 +72,27 @@ SVG.extend(SVG.Element, {
   }
   // Convert attributes to string
 , attrToString: function() {
-    var key, attrs, value
+    var i, key, value
       , attr = []
       , data = this.exportAttr()
-      , exportAttrs = this.attrs
+      , exportAttrs = this.attr()
     
     /* ensure data */
     if (typeof data == 'object')
       for (key in data)
         exportAttrs[key] = data[key]
     
-    /* get default values */
-    if (SVG._attrExportDefaults) {
-      attrs = SVG._attrExportDefaults
-      
-    } else {
-      var draft = this instanceof SVG.Doc ? this.rect(0,0) : this.doc().rect(0,0)
-      attrs = SVG._attrExportDefaults = draft.attrs
-      draft.remove()
-    }
-    
     /* build list */
     for (key in exportAttrs) {
       value = exportAttrs[key]
       
-      /* add value */
-      if (value != attrs[key]) {
-        /* enfoce explicit xlink namespace */
-        if (key == 'xlink')
-          key = 'xmlns:xlink'
-        
-        /* build value */
-        if (key != 'data-svg-export-attr' && (key != 'stroke' || parseFloat(exportAttrs['stroke-width']) > 0))
-          attr.push(key + '="' + value + '"')
-      }
+      /* enfoce explicit xlink namespace */
+      if (key == 'xlink')
+        key = 'xmlns:xlink'
+      
+      /* build value */
+      if (key != 'data-svg-export-attr' && (key != 'stroke' || parseFloat(exportAttrs['stroke-width']) > 0))
+        attr.push(key + '="' + value + '"')
       
     }
     

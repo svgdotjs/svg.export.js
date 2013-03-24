@@ -121,3 +121,7 @@ This will produce the following output:
   </rect>
 </svg>
 ```
+
+
+## Requirements
+This plugin requires svg.js v0.11 or higher
