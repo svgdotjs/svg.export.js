@@ -1,4 +1,4 @@
-// svg.export.js 0.4 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.5 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
@@ -47,12 +47,9 @@ SVG.extend(SVG.Element, {
       
       /* add children */
       if (this instanceof SVG.Container) {
-        for (i = 0, il = this.children.length; i < il; i++)
-          node += this.children[i].export(options, level + 1)
-        
-      } else if (this instanceof SVG.Wrap) {
-        node += this.child.export(options, level + 1)
-        
+        for (i = 0, il = this.children().length; i < il; i++) {
+          node += this.children()[i].export(options, level + 1)
+        }
       }
       
       /* close node */
