@@ -1,4 +1,4 @@
-// svg.export.js 0.5 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.6 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
@@ -77,7 +77,8 @@ SVG.extend(SVG.Element, {
     /* ensure data */
     if (typeof data == 'object')
       for (key in data)
-        exportAttrs[key] = data[key]
+        if (key != 'data-svg-export-attr')
+          exportAttrs[key] = data[key]
     
     /* build list */
     for (key in exportAttrs) {
@@ -92,7 +93,7 @@ SVG.extend(SVG.Element, {
         attr.push(key + '="' + value + '"')
       
     }
-    
+
     return attr.length ? ' ' + attr.join(' ') : ''
   }
   // Whitespaced string
