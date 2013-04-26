@@ -31,29 +31,33 @@ SVG.extend(SVG.Element, {
         if (options.height)
           this.attr('height', options.height)
       }
-        
-      /* open node */
-      node += this._whitespaced('<' + name + this.attrToString() + '>', options.whitespace, level)
       
-      /* reset size and add description */
-      if (this instanceof SVG.Doc) {
-        this.attr({
-          width:  width
-        , height: height
-        })
-        
-        node += this._whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
+      if (this instanceof SVG.TextNode) {
+       node += this.extractText()
+      } else {
+       /* open node */
+       node += this._whitespaced('<' + name + this.attrToString() + '>', options.whitespace, level)
+       
+       /* reset size and add description */
+       if (this instanceof SVG.Doc) {
+         this.attr({
+           width:  width
+         , height: height
+         })
+         
+         node += this._whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
+       }
+      
+       /* add children */
+       if (this instanceof SVG.Container || this instanceof SVG.TextShape) {
+         for (i = 0, il = this.children().length; i < il; i++) {
+           node += this.children()[i].export(options, level + 1)
+         }
+       }
+       
+       /* close node */
+       node += this._whitespaced('</' + name + '>', options.whitespace, level)
       }
-      
-      /* add children */
-      if (this instanceof SVG.Container) {
-        for (i = 0, il = this.children().length; i < il; i++) {
-          node += this.children()[i].export(options, level + 1)
-        }
-      }
-      
-      /* close node */
-      node += this._whitespaced('</' + name + '>', options.whitespace, level)
     }
     
     return node
