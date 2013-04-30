@@ -1,4 +1,4 @@
-// svg.export.js 0.6 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.7 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
@@ -47,10 +47,18 @@ SVG.extend(SVG.Element, {
       
       /* add children */
       if (this instanceof SVG.Container) {
-        for (i = 0, il = this.children().length; i < il; i++) {
+        for (i = 0, il = this.children().length; i < il; i++)
           node += this.children()[i].export(options, level + 1)
-        }
+
+      } else if (this instanceof SVG.Text) {
+        for (i = 0, il = this.lines.length; i < il; i++)
+          node += this.lines[i].export(options, level + 1)
+
       }
+
+      /* add tspan content */
+      if (this instanceof SVG.TSpan)
+        node += this._whitespaced(this.node.firstChild.nodeValue, options.whitespace, level + 1)
       
       /* close node */
       node += this._whitespaced('</' + name + '>', options.whitespace, level)
