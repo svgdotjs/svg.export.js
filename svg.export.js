@@ -1,4 +1,4 @@
-// svg.export.js 0.7 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.8 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
@@ -42,7 +42,16 @@ SVG.extend(SVG.Element, {
         , height: height
         })
         
+        /* add description */
         node += this._whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
+
+        /* add defs */
+        node += this._whitespaced('<defs>', options.whitespace, level + 1)
+
+        for (i = 0, il = this._defs.children().length; i < il; i++)
+          node += this._defs.children()[i].export(options, level + 2)
+
+        node += this._whitespaced('</defs>', options.whitespace, level + 1)
       }
       
       /* add children */
