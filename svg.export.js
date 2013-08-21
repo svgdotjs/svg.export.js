@@ -3,7 +3,7 @@
 // Add export method to SVG.Element 
 SVG.extend(SVG.Element, {
   // Build node string
-  export: function(options, level) {
+  exportsvg: function(options, level) {
     var i, il, width, height
       , name = this.node.nodeName
       , node = ''
@@ -49,7 +49,7 @@ SVG.extend(SVG.Element, {
         node += this._whitespaced('<defs>', options.whitespace, level + 1)
 
         for (i = 0, il = this._defs.children().length; i < il; i++)
-          node += this._defs.children()[i].export(options, level + 2)
+          node += this._defs.children()[i].exportsvg(options, level + 2)
 
         node += this._whitespaced('</defs>', options.whitespace, level + 1)
       }
@@ -57,11 +57,11 @@ SVG.extend(SVG.Element, {
       /* add children */
       if (this instanceof SVG.Container) {
         for (i = 0, il = this.children().length; i < il; i++)
-          node += this.children()[i].export(options, level + 1)
+          node += this.children()[i].exportsvg(options, level + 1)
 
       } else if (this instanceof SVG.Text) {
         for (i = 0, il = this.lines.length; i < il; i++)
-          node += this.lines[i].export(options, level + 1)
+          node += this.lines[i].exportsvg(options, level + 1)
 
       }
 
