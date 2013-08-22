@@ -4,6 +4,9 @@ A plugin for the [svgjs.com](http://svgjs.com) library export a whole svg canvas
 
 Svg.export.js is licensed under the terms of the MIT License.
 
+## IMPORTANT
+For compatibility issues with older browsers (IE8 and less) the `export()` method has been renamed to `exportSvg`. 
+
 ## Usage
 Include this plugin after including the svg.js library in your html document.
 
@@ -13,19 +16,19 @@ To export the whole svg canvas:
 var draw = SVG('paper').size(400, 400)
 var rect = draw.rect(100, 100)
 
-var svgExport = rect.export()
+var svgExport = rect.exportSvg()
 ```
 
 By default the exported svg is compressed. If you want to have a more readable output you can require whitespace:
 
 ```javascript
-var svgExport = draw.export({ whitespace: true })
+var svgExport = draw.exportSvg({ whitespace: true })
 ```
 
 The default whitespace indentation is two spaces. You can also define you own indentation style, with tabs for example:
 
 ```javascript
-var svgExport = draw.export({ whitespace: '\t' })
+var svgExport = draw.exportSvg({ whitespace: '\t' })
 ```
 
 Finally, if you are exporting the whole svg canvas you can set a target `width` and `height`. This is especially useful if you are using a the `viewbox()` method on your svg canvas:
@@ -34,7 +37,7 @@ Finally, if you are exporting the whole svg canvas you can set a target `width` 
 var draw = SVG('paper').size(400, 400).viewbox(0,0,200,200)
 var rect = draw.rect(100, 100)
 
-var svgExport = draw.export({ width: '150mm', height: '150mm' })
+var svgExport = draw.exportSvg({ width: '150mm', height: '150mm' })
 ```
 
 ## Exporting elements
@@ -44,7 +47,7 @@ Individual elements can be exported as well:
 var draw = SVG('paper')
 var rect = draw.rect(100, 100)
 
-var exportedRect = rect.export()
+var exportedRect = rect.exportSvg()
 ```
 
 ## Export attributes
@@ -54,7 +57,7 @@ In some cases you might want elements to be exported with different attribute va
 var draw = SVG('paper').size(400,400)
 var rect = draw.rect(100, 100).fill('#333').exportAttr({ fill: '#f06' })
 
-var svgExport = draw.export({ whitespace: true })
+var svgExport = draw.exportSvg({ whitespace: true })
 ```
 
 Will produce:
@@ -87,7 +90,7 @@ var draw = SVG('paper')
 var rect = draw.rect(100, 100)
 var circle = draw.circle(100)
 
-var svgExport = draw.export({
+var svgExport = draw.exportSvg({
   exclude: function() {
     return this.type == 'circle'
   }
@@ -101,7 +104,7 @@ var draw = SVG('paper')
 var rect = draw.rect(100, 100)
 var circle = draw.circle(100).data('exclude', true)
 
-var svgExport = draw.export({
+var svgExport = draw.exportSvg({
   exclude: function() {
     return this.data('exclude')
   }

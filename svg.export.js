@@ -1,120 +1,127 @@
-// svg.export.js 0.8 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.9 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
-// Add export method to SVG.Element 
-SVG.extend(SVG.Element, {
-  // Build node string
-  export: function(options, level) {
-    var i, il, width, height
-      , name = this.node.nodeName
-      , node = ''
-    
-    /* ensure options */
-    options = options || {}
-    
-    if (options.exclude == null || !options.exclude.call(this)) {
-      /* ensure defaults */
+(function() {
+
+  // Add export method to SVG.Element 
+  SVG.extend(SVG.Element, {
+    // Build node string
+    exportSvg: function(options, level) {
+      var i, il, width, height
+        , name = this.node.nodeName
+        , node = ''
+      
+      /* ensure options */
       options = options || {}
-      level = level || 0
       
-      /* set context */
-      if (this instanceof SVG.Doc) {
-        /* define doctype */
-        node += this._whitespaced('<?xml version="1.0" encoding="UTF-8"?>', options.whitespace, level)
+      if (options.exclude == null || !options.exclude.call(this)) {
+        /* ensure defaults */
+        options = options || {}
+        level = level || 0
         
-        /* store current width and height */
-        width  = this.attr('width')
-        height = this.attr('height')
+        /* set context */
+        if (this instanceof SVG.Doc) {
+          /* define doctype */
+          node += whitespaced('<?xml version="1.0" encoding="UTF-8"?>', options.whitespace, level)
+          
+          /* store current width and height */
+          width  = this.attr('width')
+          height = this.attr('height')
+          
+          /* set required size */
+          if (options.width)
+            this.attr('width', options.width)
+          if (options.height)
+            this.attr('height', options.height)
+        }
+          
+        /* open node */
+        node += whitespaced('<' + name + this.attrToString() + '>', options.whitespace, level)
         
-        /* set required size */
-        if (options.width)
-          this.attr('width', options.width)
-        if (options.height)
-          this.attr('height', options.height)
+        /* reset size and add description */
+        if (this instanceof SVG.Doc) {
+          this.attr({
+            width:  width
+          , height: height
+          })
+          
+          node += whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
+        }
+        
+        /* add children */
+        if (this instanceof SVG.Container) {
+          for (i = 0, il = this.children().length; i < il; i++)
+            node += this.children()[i].exportSvg(options, level + 1)
+
+        } else if (this instanceof SVG.Text) {
+          this.lines.each(function() {
+            node += this.exportSvg(options, level + 1)
+          })
+          
+        }
+
+        /* add tspan content */
+        if (this instanceof SVG.TSpan)
+          node += whitespaced(this.node.firstChild.nodeValue, options.whitespace, level + 1)
+        
+        /* close node */
+        node += whitespaced('</' + name + '>', options.whitespace, level)
       }
+      
+      return node
+    }
+    // Set specific export attibutes
+  , exportAttr: function(attr) {
+      /* acts as getter */
+      if (arguments.length == 0)
+        return this.data('svg-export-attr')
+      
+      /* acts as setter */
+      return this.data('svg-export-attr', attr)
+    }
+    // Convert attributes to string
+  , attrToString: function() {
+      var i, key, value
+        , attr = []
+        , data = this.exportAttr()
+        , exportAttrs = this.attr()
+      
+      /* ensure data */
+      if (typeof data == 'object')
+        for (key in data)
+          if (key != 'data-svg-export-attr')
+            exportAttrs[key] = data[key]
+      
+      /* build list */
+      for (key in exportAttrs) {
+        value = exportAttrs[key]
         
-      /* open node */
-      node += this._whitespaced('<' + name + this.attrToString() + '>', options.whitespace, level)
-      
-      /* reset size and add description */
-      if (this instanceof SVG.Doc) {
-        this.attr({
-          width:  width
-        , height: height
-        })
+        /* enfoce explicit xlink namespace */
+        if (key == 'xlink') {
+          key = 'xmlns:xlink'
+        } else if (key == 'href') {
+          if (!exportAttrs['xlink:href'])
+            key = 'xlink:href'
+        }
         
-        /* add description */
-        node += this._whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
-
-        /* add defs */
-        node += this._whitespaced('<defs>', options.whitespace, level + 1)
-
-        for (i = 0, il = this._defs.children().length; i < il; i++)
-          node += this._defs.children()[i].export(options, level + 2)
-
-        node += this._whitespaced('</defs>', options.whitespace, level + 1)
-      }
-      
-      /* add children */
-      if (this instanceof SVG.Container) {
-        for (i = 0, il = this.children().length; i < il; i++)
-          node += this.children()[i].export(options, level + 1)
-
-      } else if (this instanceof SVG.Text) {
-        for (i = 0, il = this.lines.length; i < il; i++)
-          node += this.lines[i].export(options, level + 1)
-
+        /* build value */
+        if (value && key != 'data-svg-export-attr' && key != 'href') {
+          if (key != 'stroke' || parseFloat(exportAttrs['stroke-width']) > 0)
+            attr.push(key + '="' + value + '"')
+        }
+        
       }
 
-      /* add tspan content */
-      if (this instanceof SVG.TSpan)
-        node += this._whitespaced(this.node.firstChild.nodeValue, options.whitespace, level + 1)
-      
-      /* close node */
-      node += this._whitespaced('</' + name + '>', options.whitespace, level)
+      return attr.length ? ' ' + attr.join(' ') : ''
     }
     
-    return node
-  }
-  // Set specific export attibutes
-, exportAttr: function(attr) {
-    /* acts as getter */
-    if (arguments.length == 0)
-      return this.data('svg-export-attr')
-    
-    /* acts as setter */
-    return this.data('svg-export-attr', attr)
-  }
-  // Convert attributes to string
-, attrToString: function() {
-    var i, key, value
-      , attr = []
-      , data = this.exportAttr()
-      , exportAttrs = this.attr()
-    
-    /* ensure data */
-    if (typeof data == 'object')
-      for (key in data)
-        if (key != 'data-svg-export-attr')
-          exportAttrs[key] = data[key]
-    
-    /* build list */
-    for (key in exportAttrs) {
-      value = exportAttrs[key]
-      
-      /* enfoce explicit xlink namespace */
-      if (key == 'xlink')
-        key = 'xmlns:xlink'
-      
-      /* build value */
-      if (key != 'data-svg-export-attr' && (key != 'stroke' || parseFloat(exportAttrs['stroke-width']) > 0))
-        attr.push(key + '="' + value + '"')
-      
-    }
+  })
+  
+  /////////////
+  // helpers
+  /////////////
 
-    return attr.length ? ' ' + attr.join(' ') : ''
-  }
   // Whitespaced string
-, _whitespaced: function(value, add, level) {
+  function whitespaced(value, add, level) {
     if (add) {
       var whitespace = ''
         , space = add === true ? '  ' : add || ''
@@ -129,5 +136,5 @@ SVG.extend(SVG.Element, {
     
     return value;
   }
-  
-})
+
+}).call(this)
