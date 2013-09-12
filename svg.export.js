@@ -1,6 +1,6 @@
-// svg.export.js 0.9 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.10 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
-(function() {
+;(function() {
 
   // Add export method to SVG.Element 
   SVG.extend(SVG.Element, {
@@ -61,7 +61,7 @@
 
         /* add tspan content */
         if (this instanceof SVG.TSpan)
-          node += whitespaced(this.node.firstChild.nodeValue, options.whitespace, level + 1)
+          node += whitespaced(this.node.firstChild.nodeValue.replace(/&/g,'&amp;'), options.whitespace, level + 1)
         
         /* close node */
         node += whitespaced('</' + name + '>', options.whitespace, level)
@@ -102,6 +102,10 @@
           if (!exportAttrs['xlink:href'])
             key = 'xlink:href'
         }
+
+        /* normailse value */
+        if (typeof value === 'string')
+          value = value.replace(/"/g,"'")
         
         /* build value */
         if (value && key != 'data-svg-export-attr' && key != 'href') {
