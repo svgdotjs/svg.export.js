@@ -108,7 +108,7 @@
           value = value.replace(/"/g,"'")
         
         /* build value */
-        if (value && key != 'data-svg-export-attr' && key != 'href') {
+        if (key != 'data-svg-export-attr' && key != 'href') {
           if (key != 'stroke' || parseFloat(exportAttrs['stroke-width']) > 0)
             attr.push(key + '="' + value + '"')
         }
