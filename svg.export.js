@@ -1,4 +1,4 @@
-// svg.export.js 0.10 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.11 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 ;(function() {
 
