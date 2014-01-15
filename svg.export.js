@@ -1,4 +1,4 @@
-// svg.export.js 0.11 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.12 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
 
 ;(function() {
 
@@ -48,7 +48,7 @@
         }
         
         /* add children */
-        if (this instanceof SVG.Container) {
+        if (this instanceof SVG.Parent) {
           for (i = 0, il = this.children().length; i < il; i++)
             node += this.children()[i].exportSvg(options, level + 1)
 
@@ -141,4 +141,4 @@
     return value;
   }
 
-}).call(this)
+}).call(this);
