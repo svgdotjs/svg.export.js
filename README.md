@@ -4,9 +4,6 @@ A plugin for the [svgjs.com](http://svgjs.com) library export a whole svg canvas
 
 Svg.export.js is licensed under the terms of the MIT License.
 
-## IMPORTANT
-For compatibility issues with older browsers (IE8 and less) the `export()` method has been renamed to `exportSvg`. 
-
 ## Usage
 Include this plugin after including the svg.js library in your html document.
 
@@ -127,4 +124,4 @@ This will produce the following output:
 
 
 ## Requirements
-This plugin requires svg.js v0.11 or higher
+This plugin requires svg.js v0.32 or higher

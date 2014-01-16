@@ -1,4 +1,4 @@
-// svg.export.js 0.13 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.14 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 
 ;(function() {
 
@@ -57,7 +57,7 @@
             node += this.exportSvg(options, level + 1)
           })
         
-        } else if (this instanceof SVG.ComponentTransferEffect) {
+        } else if (SVG.ComponentTransferEffect && this instanceof SVG.ComponentTransferEffect) {
           this.rgb.each(function() {
             node += this.exportSvg(options, level + 1)
           })
@@ -146,4 +146,4 @@
     return value;
   }
 
-}).call(this)
+}).call(this);
