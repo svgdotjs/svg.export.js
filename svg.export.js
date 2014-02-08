@@ -45,6 +45,8 @@
           })
           
           node += whitespaced('<desc>Created with svg.js [http://svgjs.com]</desc>', options.whitespace, level + 1)
+          /* Add defs... */
+					node += this.defs().exportSvg(options, level + 1);
         }
         
         /* add children */
