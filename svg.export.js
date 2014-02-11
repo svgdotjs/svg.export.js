@@ -68,7 +68,7 @@
 
         /* add tspan content */
         if (this instanceof SVG.TSpan)
-          node += whitespaced(this.node.firstChild.nodeValue.replace(/&/g,'&amp;'), options.whitespace, level + 1)
+          node += whitespaced(_encodeHtmlSpecialChars(this.node.firstChild.nodeValue), options.whitespace, level + 1)
         
         /* close node */
         node += whitespaced('</' + name + '>', options.whitespace, level)
@@ -147,5 +147,13 @@
     
     return value;
   }
+  
+  function _encodeHtmlSpecialChars(unsafe) {
+		return unsafe
+			.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;");
+	}
 
 }).call(this);
