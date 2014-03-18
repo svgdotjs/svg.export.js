@@ -1,4 +1,4 @@
-// svg.export.js 0.14 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.1.0 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
 
 ;(function() {
 
@@ -6,7 +6,7 @@
   SVG.extend(SVG.Element, {
     // Build node string
     exportSvg: function(options, level) {
-      var i, il, width, height
+      var i, il, width, height, well, clone
         , name = this.node.nodeName
         , node = ''
       
@@ -51,24 +51,30 @@
         
         /* add children */
         if (this instanceof SVG.Parent) {
-          for (i = 0, il = this.children().length; i < il; i++)
-            node += this.children()[i].exportSvg(options, level + 1)
+          for (i = 0, il = this.children().length; i < il; i++) {
+            if (this.children()[i] instanceof SVG.Absorbee) {
+              clone = this.children()[i].node.cloneNode(true)
+              well  = document.createElement('div')
+              well.appendChild(clone)
+              node += well.innerHTML
+            } else {
+              node += this.children()[i].exportSvg(options, level + 1)
+            }
+          }
 
-        } else if (this instanceof SVG.Text) {
-          this.lines.each(function() {
-            node += this.exportSvg(options, level + 1)
-          })
-        
+        } else if (this instanceof SVG.Text || this instanceof SVG.TSpan) {
+          for (i = 0, il = this.node.childNodes.length; i < il; i++)
+            if (this.node.childNodes[i].instance instanceof SVG.TSpan)
+              node += this.node.childNodes[i].instance.exportSvg(options, level + 1)
+            else
+              node += this.node.childNodes[i].nodeValue.replace(/&/g,'&amp;')
+
         } else if (SVG.ComponentTransferEffect && this instanceof SVG.ComponentTransferEffect) {
           this.rgb.each(function() {
             node += this.exportSvg(options, level + 1)
           })
 
         }
-
-        /* add tspan content */
-        if (this instanceof SVG.TSpan)
-          node += whitespaced(this.node.firstChild.nodeValue.replace(/&/g,'&amp;'), options.whitespace, level + 1)
         
         /* close node */
         node += whitespaced('</' + name + '>', options.whitespace, level)
