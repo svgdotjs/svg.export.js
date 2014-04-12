@@ -5,7 +5,7 @@ A plugin for the [svgjs.com](http://svgjs.com) library export a whole svg canvas
 Svg.export.js is licensed under the terms of the MIT License.
 
 ## Usage
-Include this plugin after including the svg.js library in your html document.
+Include this plugin after including the svg.js library and the [svg.absorb.js](https://github.com/wout/svg.absorb.js) plugin in your HTML document.
 
 To export the whole svg canvas:
 
