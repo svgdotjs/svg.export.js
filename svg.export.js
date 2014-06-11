@@ -52,7 +52,7 @@
         /* add children */
         if (this instanceof SVG.Parent) {
           for (i = 0, il = this.children().length; i < il; i++) {
-            if (this.children()[i] instanceof SVG.Absorbee) {
+            if (SVG.Absorbee != undefined && this.children()[i] instanceof SVG.Absorbee) {
               clone = this.children()[i].node.cloneNode(true)
               well  = document.createElement('div')
               well.appendChild(clone)
