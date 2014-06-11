@@ -1,4 +1,4 @@
-// svg.export.js 0.1.0 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
+// svg.export.js 0.1.1 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
 
 ;(function() {
 
@@ -52,7 +52,7 @@
         /* add children */
         if (this instanceof SVG.Parent) {
           for (i = 0, il = this.children().length; i < il; i++) {
-            if (SVG.Absorbee != undefined && this.children()[i] instanceof SVG.Absorbee) {
+            if (SVG.Absorbee && this.children()[i] instanceof SVG.Absorbee) {
               clone = this.children()[i].node.cloneNode(true)
               well  = document.createElement('div')
               well.appendChild(clone)
