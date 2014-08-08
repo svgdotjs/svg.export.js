@@ -13,7 +13,7 @@ To export the whole svg canvas:
 var draw = SVG('paper').size(400, 400)
 var rect = draw.rect(100, 100)
 
-var svgExport = rect.exportSvg()
+var svgExport = draw.exportSvg()
 ```
 
 By default the exported svg is compressed. If you want to have a more readable output you can require whitespace:
