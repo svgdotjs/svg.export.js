@@ -73,8 +73,9 @@
           this.rgb.each(function() {
             node += this.exportSvg(options, level + 1)
           })
-
-        }
+        } else if (SVG.ForiegnObject && this instanceof SVG.ForiegnObject) {
+          node += this.node.innerHTML
+        } 
         
         /* close node */
         node += whitespaced('</' + name + '>', options.whitespace, level)
