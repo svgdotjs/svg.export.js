@@ -1,6 +1,6 @@
 # svg.export.js
 
-A plugin for the [svgjs.com](http://svgjs.com) library export a whole svg canvas or just a single element.
+A plugin for the [svg.js](https://svgdotjs.github.io) library export a whole svg canvas or just a single element.
 
 Svg.export.js is licensed under the terms of the MIT License.
 
