@@ -8,7 +8,7 @@ Svg.export.js is licensed under the terms of the MIT License.
 As of version 2 of SVG.js, this functionality is included in the main library. Therefore this plugin is obsolete if you are using version 2 and up.
 
 ## Usage
-Include this plugin after including the svg.js library in your html document.
+Include this plugin after including the svg.js library and the [svg.absorb.js](https://github.com/wout/svg.absorb.js) plugin in your HTML document.
 
 To export the whole svg canvas:
 
